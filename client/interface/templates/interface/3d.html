@@ -1,0 +1,163 @@
+<!---<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+	<style type="text/css">
+		.stage {
+  width: 300px; height: 300px;
+  -webkit-perspective: 1600px;
+  -webkit-perspective-origin: 50% -240px;
+}
+.k{
+	  margin-left: 30px;
+  margin-top: 30px;
+}
+figure {
+  display: block;
+  position: absolute;
+  width: 300px; height: 300px;
+  background-color: #60c2ef;
+}
+.cube { -webkit-transform-style: preserve-3d; }
+figure { -webkit-transform-origin: 50% 50% 0;
+border: solid; }
+.front { -webkit-transform: translateZ(150px);
+opacity: 0.2;background:linear-gradient(180deg, #FFC0CB 50%, #00FFFF 50%); }
+.back { -webkit-transform: rotateY(180deg) translateZ(150px);opacity: 0.2;background:linear-gradient(180deg, #FFC0CB 50%, #00FFFF 50%); }
+.top { -webkit-transform: rotateX(90deg) translateZ(150px);
+background: grey; }
+.bottom { -webkit-transform: rotateX(-90deg) translateZ(150px); }
+.left { -webkit-transform: rotateY(-90deg) translateZ(150px);opacity: 0.2;background:linear-gradient(180deg, #FFC0CB 50%, #00FFFF 50%); }
+.right { -webkit-transform: rotateY(90deg) translateZ(150px);opacity: 0.2;background:linear-gradient(180deg, #FFC0CB 50%, #00FFFF 50%); }
+@-webkit-keyframes rotate {
+  0% { -webkit-transform: rotateY(0); }
+  100% { -webkit-transform: rotateY(360deg); }
+}
+.cube { -webkit-animation: rotate 10s infinite linear; }
+.top:after {
+  opacity: 0.5; width: 200%; height: 200%;
+  margin-left: -50%; margin-top: -50%;
+  background: -webkit-radial-gradient(bottom, rgba(0, 0, 0, 0), #000000);
+-webkit-animation: rotateTop 10s infinite linear;
+}
+@-webkit-keyframes rotateTop {
+  0% { -webkit-transform: rotateZ(0); }
+  100% { -webkit-transform: rotateZ(360deg); }
+}
+.bottom {
+  -webkit-box-shadow: 0 10px 100px rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0);
+}
+@-webkit-keyframes frontShading1 {
+  2% { opacity: 0; }
+  25% { opacity: 0.8; }
+  35% { opacity: 0.8; }
+  50% { opacity: 0; }
+}
+.front:before { -webkit-animation: frontShading1 10s infinite linear; }
+
+	</style>
+</head>
+<body>
+	<div class="k">
+	<div class="stage">
+  <div class="cube">
+    <figure id="back" class="back"></figure>
+    <figure class="top"></figure>
+    <figure class="bottom"></figure>
+    <figure id="left" class="left"></figure>
+    <figure id="right" class="right"></figure>
+    <figure id="front" class="front"></figure>
+  </div>
+</div>
+</div>
+<div><p id="l"></p></div>
+<script type="text/javascript">
+  function getQueryVariable(variable)
+{
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
+}
+var x=getQueryVariable("k");
+x=(100-(x/10));
+document.getElementById("front").style.background="linear-gradient(180deg, #FFC0CB "+x+"%, #00FFFF "+0+"%)";
+document.getElementById("back").style.background="linear-gradient(180deg, #FFC0CB "+x+"%, #00FFFF "+0+"%)";
+document.getElementById("left").style.background="linear-gradient(180deg, #FFC0CB "+x+"%, #00FFFF "+0+"%)";
+document.getElementById("right").style.background="linear-gradient(180deg, #FFC0CB "+x+"%, #00FFFF "+0+"%)";
+</script>
+</body>
+</html>-->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+<style>
+
+#tank{
+    position:relative;
+     margin:50px;
+}
+#middle{
+    width:120px;
+    height:180px;
+    background-color:#00ffff;
+    position:absolute;
+}
+
+
+ #top{
+    width: 120px;
+	height:100px;
+	background-color:#666;
+	-moz-border-radius: 60px / 25px;
+	-webkit-border-radius: 60px / 25px;
+	border-radius: 60px / 25px;
+    position:absolute;
+    top:-25px;
+}
+ #bottom{
+    width: 120px;
+	height: 50px;
+	background-color:#00ffff;
+	-moz-border-radius: 60px / 25px;
+	-webkit-border-radius: 60px / 25px;
+	border-radius: 60px / 25px;
+    position:absolute;
+    top:155px;
+    box-shadow:0px 0px 10px rgba(0,0,0,0.75)
+}
+</style>
+
+
+<body>
+<div id="tank">
+    <div id="bottom"></div>
+    <div id="middle"></div>
+    <div id="top"></div> 
+ 
+</div>
+<script>
+function getQueryVariable(variable)
+{
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
+}
+var height1 = getQueryVariable("k");
+
+var elem=document.getElementById("top"); 
+console.log(height1);
+elem.style.height=height1;
+</script>
+</body>
+</html>

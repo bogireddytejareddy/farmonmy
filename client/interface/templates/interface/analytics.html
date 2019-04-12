@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Agri-Seva</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <center><h1>Agri-Seva</h1></center>
+  <h2>
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="http://127.0.0.1:1991/home/">Home</a></li>
+    <li><a href="http://127.0.0.1:1991/house/">House Details</a></li>
+    <li><a href="http://127.0.0.1:1991/wells/">Well Details</a></li>
+    <li><a href="http://127.0.0.1:1991/farm/">Farm Details</a></li>
+    <li><a href="http://127.0.0.1:1991/graph/">Analytics</a></li>
+    <li><a href="http://127.0.0.1:1991/analytics/">Analysis</a></li>
+  </ul>
+  <h2>
+  <br>
+</div>
+</body>
+<head>  
+<script>
+window.onload = function () {
+var gn1 = {{gn1}};
+var p1 = {{p1}};
+var m1 = {{m1}};
+var w1 = {{w1}};
+var gn2 = {{gn2}};
+var p2 = {{p2}};
+var m2 = {{m2}};
+var w2 = {{w2}};
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	title:{
+		text: "Comparing Crops yield"
+	},
+	axisY: {
+		suffix: "%"
+	},
+	toolTip: {
+		shared: true
+	},
+	legend: {
+		reversed: true,
+		verticalAlign: "center",
+		horizontalAlign: "right"
+	},
+	data: [{
+		type: "stackedColumn100",
+		name: "Farm1",
+		showInLegend: true,
+		yValueFormatString: "#,##0\"%\"",
+		dataPoints: [
+			{ label: "Paddy", y: p1 },
+			{ label: "Maize", y: m1 },
+			{ label: "Wheat", y: w1 },
+			{ label: "Barley", y: gn1 }
+		]
+	}, 
+	{
+		type: "stackedColumn100",
+		name: "Farm2",
+		showInLegend: true,
+		yValueFormatString: "#,##0\"%\"",
+		dataPoints: [
+			{ label: "Paddy", y: p2 },
+			{ label: "Maize", y: m2 },
+			{ label: "Wheat", y: w2 },
+			{ label: "Barley", y: gn2 }
+		]
+	}]
+});
+chart.render();
+
+}
+</script>
+
+<body>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Agri-Seva</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <center><h1>Agri-Seva</h1></center>
+  <h2>
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="http://127.0.0.1:1991/home/">Home</a></li>
+    <li><a href="http://127.0.0.1:1991/house/">House Details</a></li>
+    <li><a href="http://127.0.0.1:1991/wells/">Well Details</a></li>
+    <li><a href="http://127.0.0.1:1991/farm/">Farm Details</a></li>
+    <li><a href="http://127.0.0.1:1991/graph/">Analytics</a></li>
+    <li><a href="http://127.0.0.1:1991/analytics/">Analysis</a></li>
+  </ul>
+  <h2>
+  <br>
+</div>
+
+</body>
+</html>
+
+<html>
+<head>
+<center><h1>House</h1></center>
+<body>
+<div id="map" style="width:75%;height:500px;margin:0 auto;"></div>
+<p id="demo"></p>
+<script>
+var map;
+var infoWindow;
+function initMap() {
+	map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 5,
+          center: {lat: 78.63222433381657, lng: 17.7804066798313},
+          mapTypeId: 'terrain',
+        });
+var house_lat={{house_lat}};	
+var house_lon={{house_lon}};
+var id = {{house_id}};
+var house_income = {{house_income}};
+var house_capacity={{house_capacity}};
+house_lat.forEach(function(element,index){
+	var color;
+	if(house_income[index]<30000){
+		color='red';
+	}
+	else if(house_income[index]>=30000 && house_income[index]<40000){
+		color='blue';
+	}
+	else if(house_income[index]>=40000){
+		color='green';
+	}
+var cityCircle = new google.maps.Circle({
+            strokeColor: color,
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: color,
+            fillOpacity: 0.35,
+            map: map,
+            center: {lat:house_lat[index],lng:house_lon[index]},
+            radius: Math.sqrt(house_capacity[index]) * 10000,
+          });
+	cityCircle.addListener('click', (event)=>{
+			var contentString = '<b>House_id : </b>'+id[index]+'<br><b>Monthly Income : </b>'+house_income[index]+' Rupees<br>'+'<b>House_Capacity : </b>'+house_capacity[index]+'<br>' +'<center><img src = "http://sqwanjia.net/data/out/37/38980090-country-house.jpg" alt = "Name" width = "175" height = "150"></center>';
+		infoWindow.setContent(contentString);
+		infoWindow.setPosition(event.latLng);
+		infoWindow.open(map);
+		});
+
+        });
+	infoWindow = new google.maps.InfoWindow;
+}
+</script>
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC89u1SmkUMOVrW6QhxDIs2U0Pwuuei4ws&callback=initMap">
+</script>
+<head>
+<style>
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: blue;
+   color: white;
+   text-align: center;
+}
+</style>
+</head>
+</body>
+<div class="footer">
+  <p>Contact us:admin@agriseva.com</p>
+</div>
+</html>

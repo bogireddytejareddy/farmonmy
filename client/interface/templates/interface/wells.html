@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Agri-Seva</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <center><h1>Agri-Seva</h1></center>
+  <h2>
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="http://127.0.0.1:1991/home/">Home</a></li>
+    <li><a href="http://127.0.0.1:1991/house/">House Details</a></li>
+    <li><a href="http://127.0.0.1:1991/wells/">Well Details</a></li>
+    <li><a href="http://127.0.0.1:1991/farm/">Farm Details</a></li>
+    <li><a href="http://127.0.0.1:1991/graph/">Analytics</a></li>
+    <li><a href="http://127.0.0.1:1991/analytics/">Analysis</a></li>
+  </ul>
+  <h2>
+  <br>
+</div>
+
+</body>
+</html>
+
+<html>
+<head>
+<center><h1>Wells</h1></center>
+<body>
+<div id="map" style="width:75%;height:500px;margin:0 auto;"></div>
+<p id="demo"></p>
+<script>
+var map;
+var infoWindow;
+function initMap() {
+	map = new google.maps.Map(document.getElementById('map'), {
+	zoom: 6,
+	center: {lat: 81.17414102411537, lng:16.28374000471079},
+	mapTypeId: 'terrain',
+	});
+var wells_lat={{wells_lat}};
+var wells_lon={{wells_lon}};
+var wells_depth = {{wells_depth}};
+wells_lat.forEach(function(element,index){
+		var color;
+		if(wells_depth[index]<300){
+		color='red';//color of circle show in maps
+		}
+		else if(wells_depth[index]>=300 && wells_depth[index]<400){
+		color='blue';
+		}
+		else if(wells_depth[index]>=400){
+		color='green';
+		}
+		console.log(wells_depth[index]);
+		console.log(color);
+		var cityCircle = new google.maps.Circle({
+			strokeColor: color,
+			strokeOpacity: 0.8,
+			strokeWeight: 2,
+			fillColor: color,
+			fillOpacity: 0.35,
+			map: map,
+			center: {lat:wells_lat[index],lng:wells_lon[index]},
+			radius: Math.sqrt(wells_depth[index]) * 100,
+		});
+		var temp = 340 - wells_depth[index];
+		var tempstr = temp.toString();
+		var tempstr = tempstr + 'px';
+		cityCircle.addListener('click', (event)=>{
+		var contentString = "<iframe width='450px' height='450px' style='border:none;' src='/3d?k="+tempstr+"'></iframe>"+"Depth:"+wells_depth[index]
+		infoWindow.setContent(contentString);
+		infoWindow.setPosition(event.latLng);
+		infoWindow.open(map);
+		});
+
+});
+	infoWindow = new google.maps.InfoWindow;
+}
+</script>
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC89u1SmkUMOVrW6QhxDIs2U0Pwuuei4ws&callback=initMap">
+</script>
+<head>
+<style>
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: blue;
+   color: white;
+   text-align: center;
+}
+</style>
+</head>
+</body>
+<div class="footer">
+  <p>Contact us:admin@agriseva.com</p>
+</div>
+</html>

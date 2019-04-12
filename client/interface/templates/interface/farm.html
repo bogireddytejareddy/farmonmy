@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Agri-Seva</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <center><h1>Agri-Seva</h1></center>
+  <h2>
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="http://127.0.0.1:1991/home/">Home</a></li>
+    <li><a href="http://127.0.0.1:1991/house/">House Details</a></li>
+    <li><a href="http://127.0.0.1:1991/wells/">Well Details</a></li>
+    <li><a href="http://127.0.0.1:1991/farm/">Farm Details</a></li>
+    <li><a href="http://127.0.0.1:1991/graph/">Analytics</a></li>
+    <li><a href="http://127.0.0.1:1991/analytics/">Analysis</a></li>
+  </ul>
+  <h2>
+  <br>
+</div>
+
+</body>
+</html>
+<html>
+<head>
+<center><h1>Farms</h1></center>
+<body >
+<div id="map_canvas" style="width:75%;height:500px;margin:0 auto;"></div>
+    <link href="http://code.google.com//apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css">
+    <script  src="http://code.jquery.com/jquery-1.7.2.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.10&sensor=false&.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi?.js"></script>
+    <script type="text/javascript">
+        google.load( 'visualization', '1', { packages:['corechart'] });
+        ChartMarker.prototype = new google.maps.OverlayView;
+        ChartMarker.prototype.onAdd = function() {
+            $( this.getPanes().overlayMouseTarget ).append( this.$div );
+        };
+
+        ChartMarker.prototype.onRemove = function() {
+            this.$div.remove();
+        };
+	//Make pie chart at this position
+        ChartMarker.prototype.draw = function() {
+            var marker = this;
+            var projection = this.getProjection();
+            var position = projection.fromLatLngToDivPixel( this.get('position') );
+
+            this.$div.css({
+                left: position.x,
+                top: position.y,
+                display: 'block'
+            })
+
+            this.$inner
+                    .html( '<img src="' + this.get('image') + '"/>' )
+                    .click( function( event ) {
+                        var events = marker.get('events');
+                        events && events.click( event );
+                    });
+
+            this.chart = new google.visualization.PieChart( this.$inner[0] );
+            this.chart.draw( this.get('chartData'), this.get('chartOptions') );
+        };
+
+	//Initialize pie chart with slices and colors
+        function drawChart(marker, data, event, location) {
+
+
+            var options = {'title':'Event : '+event+'  Location : '+location,
+                'width':300,
+                'height':300,
+                slices: {0: {color: 'orange'}, 1:{color: 'green'}, 2:{color: 'yellow'}, 3: {color: 'blue'}}};
+
+            var node        = document.createElement('div'),
+                    infoWindow  = new google.maps.InfoWindow(),
+                    chart       = new google.visualization.PieChart(node);
+            chart.draw(data, options);
+            infoWindow.setContent(node);
+            infoWindow.open(marker.getMap(),marker);
+        }
+	//Defining the pie chart properties
+        function ChartMarker( options ) {
+            this.setValues( options );
+            this.$inner = $('<div>').css({
+                position: 'relative',
+                left: '-50%', top: '-50%',
+                width: options.width,
+                height: options.height,
+                fontSize: '1px',
+                lineHeight: '1px',
+                padding: '2px',
+                backgroundColor: 'transparent',
+                cursor: 'default'
+            });
+            this.$div = $('<div>')
+                    .append( this.$inner )
+                    .css({
+                        position: 'absolute',
+                        display: 'none'
+              
+      });
+        };
+//intialize map
+      var infoWindow;
+        function initialize() {
+            var latLng = new google.maps.LatLng(80.5242, 16.9958)
+	  var markers = {{final}};
+	console.log("abcd");
+            var mapOptions = {
+                center: latLng,
+                zoom: 4,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var map = new google.maps.Map(document.getElementById("map_canvas"),
+                    mapOptions);
+            var x=13.5244;
+    	var A={{farm_lat}};
+	var B={{farm_lon}};
+	var C = {{farm_id}};
+	var D = {{farminfo_id}};	
+	//Loop through locations create polygons insert pie chart
+      B.forEach(function(element,index){
+		coords = [];
+		var x = element.length;
+		for(var j=0;j<x;j++)
+		{
+			coords.push({lat:A[index][j],lng:B[index][j]});
+		}
+		console.log(coords);
+		var bermudaTriangle = new google.maps.Polygon({
+			  paths: coords,
+			  strokeColor: '#FF0000',
+			  strokeOpacity: 0.8,
+			  strokeWeight: 3,
+			  fillColor: '#FF0000',
+			  fillOpacity: 3
+		});
+        	bermudaTriangle.setMap(map);
+		//Set info window content
+
+		bermudaTriangle.addListener('click', (event)=>{
+			
+			var contentString = '<b>Farm Id : </b>'+C[index]+'<br><b>House_id : </b>'+D[index];
+			infoWindow.setContent(contentString);
+			infoWindow.setPosition(event.latLng);
+			infoWindow.open(map);
+		});
+
+	});
+	infoWindow = new google.maps.InfoWindow;
+
+            for(var k=0;k<markers.length;k++){
+		console.log(markers[k]);
+                var location = new google.maps.LatLng(markers[k][0],markers[k][1])
+                var data = google.visualization.arrayToDataTable([
+                    [ 'Crop', 'Acres' ],
+                    [ 'paddy', markers[k][2] ],
+                    [ 'groundnut', markers[k][3] ],
+                    [ 'Maize',markers[k][4] ],
+                    [ 'Wheat', markers[k][5] ]
+                ]);
+                var options = {
+                    fontSize: 8,
+                    backgroundColor: 'transparent',
+                    legend: {position: 'none'}
+                };
+                (function(location,data){
+    var marker = new ChartMarker({
+                        map: map,
+                        position: location,
+                        width: '50px',
+                        height: '50px',
+                        chartData: data,
+                        chartOptions: options,
+                        events: {
+                            click: function( event ) {
+                                drawChart(marker,data)
+                            }
+                        }
+                    });
+
+})(location,data);
+            }
+        };
+              
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
+</head>
+<head>
+<style>
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: blue;
+   color: white;
+   text-align: center;
+}
+</style>
+</head>
+</body>
+<div class="footer">
+  <p>Contact us:admin@agriseva.com</p>
+</div>
+</html>
